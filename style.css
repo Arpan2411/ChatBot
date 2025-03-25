@@ -1,0 +1,133 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    
+}
+
+.chat-container {
+    height:500px;
+    width: 900px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    background-color: #007bff;
+    color: #fff;
+    padding: 15px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+@media (max-width:267px){
+    .chat-header{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    align-items: center;
+    }
+    
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    border-bottom: 1px solid #ddd;
+    gap: 5px;
+}
+
+.message {
+    margin-bottom: 15px;
+}
+
+.message.user {
+    text-align: right;
+}
+
+.message.bot {
+    text-align: left;
+}
+
+.message p {
+    display: inline-block;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 70%;
+}
+
+
+.message.user p {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.message.bot p {
+    background-color: #f1f1f1;
+    color: #333;
+}
+
+.chat-input {
+    display: flex;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+
+.chat-input button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.chat-input button:hover {
+    background-color: #0056b3;
+}
+.instruct{
+    display: flex;
+    height: 100px;
+    width: 200px;
+
+}
+.wordsRequired{
+    display: flex;
+}
+.dropdown{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    height: 40px;
+    width: 90px;
+    
+}
+.wordLimit{
+    height: 40px;
+    width: 90px;
+    
+}
