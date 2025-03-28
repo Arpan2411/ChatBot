@@ -1,104 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chatbot Interface</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .chat-messages {
+            max-height: 400px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+        .loading-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .loading-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #007bff;
+            border-radius: 50%;
+            animation: blink 1.5s infinite ease-in-out;
+        }
+        .loading-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .loading-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes blink {
+            0%, 80%, 100% { opacity: 0; }
+            40% { opacity: 1; }
+        }
+    </style>
 </head>
-
 <body>
     <div class="chat-container">
         <div class="chat-header">      
             <div><img src="ChatBot logo.jpg" height="50px" width="50px" alt=""></div>
-           <div> YOUR AI ASSISTANT</div>
+            <div>YOUR AI ASSISTANT</div>
         </div>
-        <div class="chat-messages">
-            <div class="message bot">
-                <p>Hii I'm your ai assistant </p>
-            </div>
-            <div class="message bot">
-                <p>How can I help you?</p>
-            </div>
-            <div class="message user" id="messageToUser">
-                  <!-- Messages will be dynamically added here -->
-            </div>
-
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot"><p>Hii I'm your AI assistant</p></div>
+            <div class="message bot"><p>How can I help you?</p></div>
         </div>
         <div class="chat-input" id="chatInput">
-            <input type="text" placeholder="Type a message...">
+            <input type="text" id="userInput" placeholder="Type a message...">
             <button id="sendBtn">Send</button>
         </div>
-       
-        <!-- Example split danger button -->
-        <div class="dropdown">
-            <select class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                Choose AI
-                <option value="">Gemini</option>
-                <option value="">DeepSeek</option>
-                <option value="">Llama</option>
-
-
-            </select>         
-            <p><input class=" btn-primary wordLimit" type="text" placeholder="No of words"></p>
-        </div>
-    </div>
-
     </div>
     <script>
-       // DOM Elements
-       const chatMessages = document.getElementById('chatMessages');
+        const chatMessages = document.getElementById('chatMessages');
         const userInput = document.getElementById('userInput');
         const sendBtn = document.getElementById('sendBtn');
 
-        // Function to add a message to the chat
         function addMessage(sender, message) {
             const messageDiv = document.createElement('div');
             messageDiv.classList.add('message', sender);
-
-            const messageText = document.createElement('p');
-            messageText.textContent = message;
-
-            messageDiv.appendChild(messageText);
+            messageDiv.innerHTML = `<p>${message}</p>`;
             chatMessages.appendChild(messageDiv);
-
-            // Scroll to the bottom of the chat
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        // Function to show a "Bot is typing..." indicator
-        function showTypingIndicator() {
-            const typingIndicator = document.createElement('div');
-            typingIndicator.classList.add('message', 'bot');
-            typingIndicator.id = 'typingIndicator';
-
-            const typingText = document.createElement('p');
-            typingText.textContent = 'Bot is typing...';
-
-            typingIndicator.appendChild(typingText);
-            chatMessages.appendChild(typingIndicator);
-
-            // Scroll to the bottom of the chat
+        function showLoadingIndicator() {
+            const loadingIndicator = document.createElement('div');
+            loadingIndicator.classList.add('message', 'bot', 'loading-indicator');
+            loadingIndicator.id = 'loadingIndicator';
+            loadingIndicator.innerHTML = `
+                <p>Bot is typing...</p>
+                <div class="loading-dot"></div>
+                <div class="loading-dot"></div>
+                <div class="loading-dot"></div>
+            `;
+            chatMessages.appendChild(loadingIndicator);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        // Function to hide the "Bot is typing..." indicator
-        function hideTypingIndicator() {
-            const typingIndicator = document.getElementById('typingIndicator');
-            if (typingIndicator) {
-                typingIndicator.remove();
+        function hideLoadingIndicator() {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            if (loadingIndicator) {
+                loadingIndicator.remove();
             }
         }
 
-        // Function to simulate a bot response
         function botResponse(userMessage) {
-            let botMessage = '';
+            let botMessage = 'I am sorry, I do not understand that. Can you please clarify?';
 
-            // Simple logic for bot responses
             if (userMessage.toLowerCase().includes('hello')) {
                 botMessage = 'Hello! How can I assist you today?';
             } else if (userMessage.toLowerCase().includes('how are you')) {
@@ -106,50 +95,32 @@
             } else if (userMessage.toLowerCase().includes('your name')) {
                 botMessage = 'I am Your AI Assistant.';
             } else if (userMessage.toLowerCase().includes('thank you')) {
-                botMessage = 'You\'re welcome!';
-            } else {
-                botMessage = 'I am sorry, I do not understand that. Can you please clarify?';
+                botMessage = "You're welcome!";
             }
-
-            // Show typing indicator
-            showTypingIndicator();
-
-            // Add a delay to simulate a real bot response
+            
+            showLoadingIndicator();
             setTimeout(() => {
-                hideTypingIndicator(); // Hide typing indicator
-                addMessage('bot', botMessage); // Add bot's response
-            }, 1000); // 1-second delay
+                hideLoadingIndicator();
+                addMessage('bot', botMessage);
+            }, 2000);
         }
 
-        // Event listener for the send button
         sendBtn.addEventListener('click', function () {
             const userMessage = userInput.value.trim();
-
             if (userMessage) {
-                // Add the user's message to the chat
                 addMessage('user', userMessage);
-
-                // Clear the input field
                 userInput.value = '';
-
-                // Simulate a bot response
                 botResponse(userMessage);
             } else {
-                alert('Please enter a message.'); // Prevent empty messages
+                alert('Please enter a message.');
             }
         });
 
-        // Allow pressing "Enter" to send a message
         userInput.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
-                sendBtn.click(); // Trigger the send button click
+                sendBtn.click();
             }
         });
-        wordLimitInput.addEventListener('wordLimit', function () {
-            this.value = this.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
-        });
     </script>
-
 </body>
-
 </html>
